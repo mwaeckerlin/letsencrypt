@@ -19,11 +19,8 @@ EXPOSE 443
 ADD start.sh /start.sh
 ADD renew.sh /renew.sh
 
-WORKDIR /opt
-RUN apt-get update
-RUN apt-get install -y git python3-pip python3-urllib3
-RUN git clone https://github.com/letsencrypt/letsencrypt
 WORKDIR /tmp
-RUN /opt/letsencrypt/letsencrypt-auto -t -vvv --debug --help
+RUN apt-get update
+RUN apt-get install -y letsencrypt
 
 CMD /start.sh
