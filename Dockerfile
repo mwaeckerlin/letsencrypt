@@ -1,8 +1,7 @@
 # Provides a docker volume with letsencrypt certificates
 # e.g. to be used by mwaeckerlin/reverse-proxy
-FROM ubuntu
+FROM mwaeckerlin/ubuntu-base
 MAINTAINER mwaeckerlin
-ENV TERM "xterm"
 
 VOLUME /etc/ssl/private
 
