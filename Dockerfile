@@ -14,9 +14,9 @@ ADD renew.letsencrypt.sh /renew.letsencrypt.sh
 ADD config.nginx.sh /config.nginx.sh
 
 WORKDIR /tmp
+RUN add-apt-repository -y ppa:certbot/certbot
 RUN apt-get update
-RUN apt-get install -y letsencrypt
-RUN mkdir -p /acme/.well-known
+RUN apt-get install -y certbot
 
 ENTRYPOINT /start.letsencrypt.sh
 

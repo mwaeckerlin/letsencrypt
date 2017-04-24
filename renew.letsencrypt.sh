@@ -1,3 +1,3 @@
 #! /bin/bash -ex
 
-letsencrypt renew -n -a webroot --webroot-path=/acme
+certbot renew -n -a webroot --webroot-path=/acme
