@@ -3,23 +3,21 @@
 FROM mwaeckerlin/ubuntu-base
 MAINTAINER mwaeckerlin
 
-VOLUME /etc/ssl/private
-
-# for DOMAINS you can simply add letsencrypt parameters, such as e.g.:
-#   -m mail@domain1.tld -d domain1.tld -m mail@domain2.tld -d domain2.tld
-ENV DOMAINS ""
-ENV LETSENCRYPT_OPTIONS ""
 ENV HTTP_PORT "80"
 ENV HTTPS_PORT "443"
 
 EXPOSE 80
 EXPOSE 443
 
-ADD start.sh /start.sh
-ADD renew.sh /renew.sh
+ADD start.letsencrypt.sh /start.letsencrypt.sh
+ADD renew.letsencrypt.sh /renew.letsencrypt.sh
+ADD config.nginx.sh /config.nginx.sh
 
 WORKDIR /tmp
 RUN apt-get update
 RUN apt-get install -y letsencrypt
+RUN mkdir -p /acme/.well-known
 
-CMD /start.sh
+ENTRYPOINT /start.letsencrypt.sh
+
+VOLUME /etc/letsencrypt
