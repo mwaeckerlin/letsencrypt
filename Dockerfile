@@ -17,6 +17,7 @@ WORKDIR /tmp
 RUN add-apt-repository -y ppa:certbot/certbot
 RUN apt-get update
 RUN apt-get install -y certbot
+RUN mkdir -p /acme/.well-known
 
 ENTRYPOINT /start.letsencrypt.sh
 
