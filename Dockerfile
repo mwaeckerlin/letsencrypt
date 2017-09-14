@@ -8,9 +8,6 @@ ENV HTTPS_PORT 443
 ENV MAILCONTACT ""
 ENV LETSENCRYPT "on"
 
-EXPOSE 80
-EXPOSE 443
-
 ADD start.letsencrypt.sh /start.letsencrypt.sh
 ADD renew.letsencrypt.sh /renew.letsencrypt.sh
 ADD config.nginx.sh /config.nginx.sh
