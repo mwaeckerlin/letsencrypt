@@ -16,6 +16,9 @@ havecerts() {
 }
 
 installcerts() {
+    if test "$LETSENCRYPT" = "off"; then
+        return 0
+    fi
     local server=$1
     local subs="$(echo ${2:-www} | tr ' ' '\n' | sed '/\*/d' | tr '\n' ' ')"
     local mail="--register-unsafely-without-email"
