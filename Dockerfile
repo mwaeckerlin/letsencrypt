@@ -10,7 +10,6 @@ ENV LETSENCRYPT "on"
 
 ADD start.letsencrypt.sh /start.letsencrypt.sh
 ADD renew.letsencrypt.sh /renew.letsencrypt.sh
-ADD config.nginx.sh /config.nginx.sh
 ADD letsencrypt-config.sh /letsencrypt-config.sh
 ADD letsencrypt-dns-authenticator.sh /letsencrypt-dns-authenticator.sh
 ADD letsencrypt-dns-cleanup.sh /letsencrypt-dns-cleanup.sh
