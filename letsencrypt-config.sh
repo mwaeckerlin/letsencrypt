@@ -17,7 +17,7 @@ havecerts() {
 
 installcerts() {
     local server=$1
-    local subs="${2:-www} "
+    local subs="$(echo ${2:-www} | tr ' ' '\n' | sed '/\*/d' | tr '\n' ' ')"
     local mail="--register-unsafely-without-email"
     echo "    - server ${server} get certificates from let's encrypt"
     if test -n "${MAILCONTACT}"; then
