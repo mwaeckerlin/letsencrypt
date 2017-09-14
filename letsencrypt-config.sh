@@ -17,6 +17,7 @@ havecerts() {
 
 installcerts() {
     local server=$1
+    local subs="${2:-www} "
     local mail="--register-unsafely-without-email"
     echo "    - server ${server} get certificates from let's encrypt"
     if test -n "${MAILCONTACT}"; then
@@ -28,9 +29,20 @@ installcerts() {
     fi
     if ! test -e "$(certfile $server)" -a -e "$(keyfile $server)"; then
         if pgrep nginx 2>&1 > /dev/null; then
-            certbot certonly -n --agree-tos -a webroot --webroot-path=/acme -d ${server} -d www.${server} ${mail}
+            # use running nginx to get certificates
+            certbot certonly -n --agree-tos -a webroot --webroot-path=/acme \
+                    -d ${subs// /.${server} -d } ${server} ${mail}
+        elif test -e /etc/bind/$server && pgrep named 2>&1 > /dev/null; then
+            # use dns to get certificates
+            certbot certonly -n --agree-tos --manual-public-ip-logging-ok \
+                    --preferred-challenges dns --manual \
+                    --manual-auth-hook /letsencrypt-dns-authenticator.sh \
+                    --manual-cleanup-hook /letsencrypt-dns-cleanup.sh \
+                    -d ${server} -d www.${server} ${mail}
         else
-            certbot certonly -n --agree-tos -a standalone -d ${server} -d www.${server} ${mail}
+            # fallback standalone, needs access to ports 80, 443
+            certbot certonly -n --agree-tos -a standalone \
+                    -d ${server} -d www.${server} ${mail}
         fi
     fi
     if ! test -e "$(certfile $server)" -a -e "$(keyfile $server)"; then

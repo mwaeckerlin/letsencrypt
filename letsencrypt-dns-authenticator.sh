@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+test -e /etc/bind/${CERTBOT_DOMAIN}
+sed -e '/^_acme-challenge/d' \
+    -e "s/[0-9]\+\t; Serial/${SERIAL:-$(date +%s)}	; Serial/" \
+    -e '/^@[ \t]\+IN[ \t]\+A/a_acme-challenge	300	IN	TXT "'"${CERTBOT_VALIDATION}"'"' \
+    -i /etc/bind/${CERTBOT_DOMAIN}
+kill -HUP $(pgrep named)
