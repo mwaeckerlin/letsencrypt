@@ -62,7 +62,7 @@ installcerts() {
     fi
     if ! test -e "$(certfile $server)" -a -e "$(keyfile $server)"; then
         echo "**** ERROR: Installation of Let's Encrypt certificates failed for $server" 1>&2
-        exit 1
+        return 0
     fi
     cp /renew.letsencrypt.sh /etc/cron.monthly/renew
 }
