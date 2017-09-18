@@ -20,9 +20,13 @@ installcerts() {
         return 0
     fi
     local server=$1
-    local subs="$(echo ${2:-www} | tr ' ' '\n' | sed '/\*/d' | tr '\n' ' ')"
+    local subs="${2:-www}"
     local mail="--register-unsafely-without-email"
+    local domainlist="-d ${server}"
     echo "    - server ${server} get certificates from let's encrypt"
+    for d in $subs; do
+        domainlist+=" -d ${d}.${server}"
+    done
     if test -n "${MAILCONTACT}"; then
         if [[ "${MAILCONTACT}" =~ @ ]]; then
             mail="-m ${MAILCONTACT}"
@@ -34,7 +38,7 @@ installcerts() {
         if pgrep nginx 2>&1 > /dev/null; then
             # use running nginx to get certificates
             if certbot certonly -n --agree-tos -a webroot --webroot-path=/acme \
-                       -d ${subs// /.${server} -d } ${server} ${mail}; then
+                       ${domainlist} ${mail}; then
                 echo "#### Lets' Encrypt success"
             else
                 echo "**** Lets' Encrypt fail"
@@ -45,7 +49,7 @@ installcerts() {
                        --preferred-challenges dns --manual \
                        --manual-auth-hook /letsencrypt-dns-authenticator.sh \
                        --manual-cleanup-hook /letsencrypt-dns-cleanup.sh \
-                       -d ${server} -d www.${server} ${mail}; then
+                       ${domainlist} ${mail}; then
                 echo "#### Lets' Encrypt success"
             else
                 echo "**** Lets' Encrypt fail"
@@ -53,7 +57,7 @@ installcerts() {
         else
             # fallback standalone, needs access to ports 80, 443
             if certbot certonly -n --agree-tos -a standalone \
-                       -d ${server} -d www.${server} ${mail}; then
+                       ${domainlist} ${mail}; then
                 echo "#### Lets' Encrypt success"
             else
                 echo "**** Lets' Encrypt fail"
