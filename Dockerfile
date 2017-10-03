@@ -23,3 +23,4 @@ RUN mkdir -p /acme/.well-known
 ENTRYPOINT /start.letsencrypt.sh
 
 VOLUME /etc/letsencrypt
+EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
