@@ -1,5 +1,8 @@
 #!/bin/bash -e
 
+chgrp -R ssl-cert /etc/letsencrypt
+chmod -R g=rX /etc/letsencrypt
+
 certfile() {
     local server=$1
     echo "/etc/letsencrypt/live/${server}/fullchain.pem"
