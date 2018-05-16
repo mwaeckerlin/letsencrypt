@@ -1,6 +1,6 @@
 #!/bin/sh -e
 
-chgrp -R ssl-cert /etc/letsencrypt
+chgrp -R $SHARED_GROUP_NAME /etc/letsencrypt
 chmod -R g=rX /etc/letsencrypt
 
 certfile() {
