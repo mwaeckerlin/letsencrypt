@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 chgrp -R ssl-cert /etc/letsencrypt
 chmod -R g=rX /etc/letsencrypt
@@ -20,6 +20,7 @@ havecerts() {
 
 installcerts() {
     if test "$LETSENCRYPT" = "off"; then
+	rm /etc/periodic/monthly/renew
         return 0
     fi
     local server=$1
@@ -71,5 +72,4 @@ installcerts() {
         echo "**** ERROR: Installation of Let's Encrypt certificates failed for $server" 1>&2
         return 0
     fi
-    cp /renew.letsencrypt.sh /etc/cron.monthly/renew
 }

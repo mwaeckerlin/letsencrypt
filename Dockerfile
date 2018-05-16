@@ -1,26 +1,32 @@
-# Provides a docker volume with letsencrypt certificates
-# e.g. to be used by mwaeckerlin/reverse-proxy
-FROM mwaeckerlin/ubuntu-base
+FROM mwaeckerlin/base
 MAINTAINER mwaeckerlin
+ARG wwwuser="nginx"
 
 ENV HTTP_PORT 80
 ENV HTTPS_PORT 443
 ENV MAILCONTACT ""
 ENV LETSENCRYPT "on"
 
-ADD start.letsencrypt.sh /start.letsencrypt.sh
-ADD renew.letsencrypt.sh /renew.letsencrypt.sh
+ENV WWWUSER "${wwwuser}"
+ENV CONTAINERNAME "letsencrypt"
+ADD renew.letsencrypt.sh /etc/periodic/monthly/renew
 ADD letsencrypt-config.sh /letsencrypt-config.sh
 ADD letsencrypt-dns-authenticator.sh /letsencrypt-dns-authenticator.sh
 ADD letsencrypt-dns-cleanup.sh /letsencrypt-dns-cleanup.sh
 
 WORKDIR /tmp
-RUN add-apt-repository -y ppa:certbot/certbot
-RUN apt-get update
-RUN apt-get install -y certbot
+RUN adduser -SDHG $SHARED_GROUP_NAME $WWWUSER
+RUN apk add certbot dcron
 RUN mkdir -p /acme/.well-known
-
-ENTRYPOINT /start.letsencrypt.sh
+RUN chown -R $WWWUSER /acme/.well-known
+RUN /cleanup.sh
 
 VOLUME /etc/letsencrypt
 EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
+
+# pass inherited build arguments to children
+ONBUILD RUN mv /start.sh /letsencrypt.start.sh
+ONBUILD ADD start.sh /start.sh
+ONBUILD ADD health.sh /health.sh
+ONBUILD ARG lang
+ONBUILD ENV LANG=${lang:-${LANG}}

@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/sh -e
 
 if ! test -e /etc/bind/${CERTBOT_DOMAIN}; then
     echo "**** ERROR: file not found /etc/bind/${CERTBOT_DOMAIN}" 1>&2
