@@ -29,7 +29,7 @@ installcerts() {
     local domainlist="-d ${server}"
     echo "    - server ${server} get certificates from let's encrypt"
     for d in $subs; do
-        domainlist+=" -d ${d}.${server}"
+        domainlist="${domainlist} -d ${d}.${server}"
     done
     if test -n "${MAILCONTACT}"; then
         if [[ "${MAILCONTACT}" =~ @ ]]; then
