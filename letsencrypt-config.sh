@@ -32,7 +32,7 @@ installcerts() {
         domainlist="${domainlist} -d ${d}.${server}"
     done
     if test -n "${MAILCONTACT}"; then
-        if [[ "${MAILCONTACT}" =~ @ ]]; then
+        if test "${MAILCONTACT//@/}" != "${MAILCONTACT}"; then
             mail="-m ${MAILCONTACT}"
         else
             mail="-m ${MAILCONTACT}@${server}"

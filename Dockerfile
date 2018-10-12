@@ -15,11 +15,11 @@ ADD letsencrypt-dns-authenticator.sh /letsencrypt-dns-authenticator.sh
 ADD letsencrypt-dns-cleanup.sh /letsencrypt-dns-cleanup.sh
 
 WORKDIR /tmp
-RUN adduser -SDHG $SHARED_GROUP_NAME $WWWUSER
-RUN apk add certbot dcron
-RUN mkdir -p /acme/.well-known
-RUN chown -R $WWWUSER /acme/.well-known
-RUN /cleanup.sh
+RUN adduser -SDHG $SHARED_GROUP_NAME $WWWUSER \
+ && apk add certbot dcron \
+ && mkdir -p /acme/.well-known \
+ && chown -R $WWWUSER /acme/.well-known \
+ && /cleanup.sh
 
 VOLUME /etc/letsencrypt
 EXPOSE ${HTTP_PORT} ${HTTPS_PORT}
