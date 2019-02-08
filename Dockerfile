@@ -2,8 +2,8 @@ FROM mwaeckerlin/base
 MAINTAINER mwaeckerlin
 ARG wwwuser="nginx"
 
-ENV HTTP_PORT 80
-ENV HTTPS_PORT 443
+ENV HTTP_PORT 8000
+ENV HTTPS_PORT 8443
 ENV MAILCONTACT ""
 ENV LETSENCRYPT "on"
 
@@ -15,11 +15,12 @@ ADD letsencrypt-dns-authenticator.sh /letsencrypt-dns-authenticator.sh
 ADD letsencrypt-dns-cleanup.sh /letsencrypt-dns-cleanup.sh
 
 WORKDIR /tmp
+ENV userdirs "/acme/.well-known /etc/letsencrypt /var/log/letsencrypt /var/lib/letsencrypt"
 RUN adduser -SDHG $SHARED_GROUP_NAME $WWWUSER \
- && apk add certbot dcron \
- && mkdir -p /acme/.well-known \
- && chown -R $WWWUSER /acme/.well-known \
- && /cleanup.sh
+ && apk add --no-cache --purge --clean-protected -u certbot dcron \
+ && mkdir -p ${userdirs} \
+ && chown -R ${WWWUSER}:${SHARED_GROUP_NAME} ${userdirs} /usr/sbin/crond \
+ && chmod -R g=rX /etc/letsencrypt
 
 VOLUME /etc/letsencrypt
 EXPOSE ${HTTP_PORT} ${HTTPS_PORT}

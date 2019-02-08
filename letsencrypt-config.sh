@@ -1,8 +1,5 @@
 #!/bin/sh -e
 
-chgrp -R $SHARED_GROUP_NAME /etc/letsencrypt
-chmod -R g=rX /etc/letsencrypt
-
 certfile() {
     local server=$1
     echo "/etc/letsencrypt/live/${server}/fullchain.pem"
