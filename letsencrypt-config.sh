@@ -16,10 +16,6 @@ havecerts() {
 }
 
 installcerts() {
-    if test "$LETSENCRYPT" = "off"; then
-	rm /etc/periodic/monthly/renew
-        return 0
-    fi
     local server=$1
     local subs="${2:-www}"
     local mail="--register-unsafely-without-email"
@@ -36,7 +32,7 @@ installcerts() {
         fi
     fi
     if ! test -e "$(certfile $server)" -a -e "$(keyfile $server)"; then
-        if pgrep nginx 2>&1 > /dev/null; then
+        if test -n "$WEBROOT" || pgrep nginx 2>&1 > /dev/null; then
             # use running nginx to get certificates
             if certbot certonly -n --agree-tos -a webroot --webroot-path=/acme \
                        ${domainlist} ${mail}; then

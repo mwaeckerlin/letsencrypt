@@ -1,6 +1,2 @@
 #! /bin/sh -ex
-
-certbot renew -n -a webroot --webroot-path=/acme
-if nginx -t; then
-    nginx -s reload
-fi
+certbot renew -n --agree-tos -a webroot -w /acme --work-dir=/tmp --logs-dir=/tmp
