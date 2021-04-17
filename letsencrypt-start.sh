@@ -1,6 +1,4 @@
-#! /bin/sh -ex
-
-touch /.well-known/ready
+#! /bin/sh -x
 
 for domain in ${DOMAINS}; do
     DOMAINLIST=$(for subdomain in ${domain//,/ }; do
