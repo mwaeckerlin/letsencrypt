@@ -5,6 +5,6 @@ services:
     build: .
     environment:
       EMAIL: "me@somewhere.universe"
-      DOMAINS: "example.com domain.com"
+      DOMAINS: "domain.com,a.domain.com,b.domain.com example.com"
       PREFIXES: "www mail"
       OPTIONS: "--dry-run"

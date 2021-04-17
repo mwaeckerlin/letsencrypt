@@ -1,6 +1,6 @@
-# Base Image for Let's Encrypt
+# Standalone Image for Let's Encrypt
 
-Standalone certificate aquiry and renewal, requests certificates specified as space separated list in variable `DOMAINS` and tries to daily renew them.
+Standalone certificate aquiry and renewal, requests certificates specified as space separated list in variable `DOMAINS` and tries to daily renew them. If you have subdomains, separate them by comma. E.g. `"domain1.com domain2.com a.domain3.com,b.domain.com,c.domain.com"`
 
 If variable `PREFIXES` is specified, it automatically prepends the space separated content to all domains in the `DOMAINS`. By default, prepends `www.` to every domain.
 
