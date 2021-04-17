@@ -1,2 +1,2 @@
 #! /bin/sh -ex
-certbot renew -n --agree-tos -a webroot -w /acme --work-dir=/tmp --logs-dir=/tmp
+certbot renew ${OPTIONS} -n --agree-tos --${MODE:-webroot} --work-dir /tmp -w /.well-known ${EMAIL:+-m} ${EMAIL}

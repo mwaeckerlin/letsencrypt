@@ -1,0 +1,10 @@
+version: "3.4"
+services:
+  certbot:
+    image: mwaeckerlin/letsencrypt
+    build: .
+    environment:
+      EMAIL: "me@somewhere.universe"
+      DOMAINS: "example.com domain.com"
+      PREFIXES: "www mail"
+      OPTIONS: "--dry-run"

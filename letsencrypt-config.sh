@@ -32,21 +32,21 @@ installcerts() {
         fi
     fi
     if ! test -e "$(certfile $server)" -a -e "$(keyfile $server)"; then
-        if test -n "$WEBROOT" || pgrep nginx 2>&1 > /dev/null; then
+        if test -n "$WEBROOT" || pgrep nginx 2>&1 >/dev/null; then
             # use running nginx to get certificates
-            if certbot certonly -n --agree-tos -a webroot --webroot-path=/acme \
-                       ${domainlist} ${mail}; then
+            if certbot certonly -n --agree-tos -a webroot --webroot-path=/.well-known \
+                ${domainlist} ${mail}; then
                 echo "#### Lets' Encrypt success"
             else
                 echo "**** Lets' Encrypt fail"
             fi
-        elif test -e /etc/bind/$server && pgrep named 2>&1 > /dev/null; then
+        elif test -e /etc/bind/$server && pgrep named 2>&1 >/dev/null; then
             # use dns to get certificates
             if certbot certonly -n --agree-tos --manual-public-ip-logging-ok \
-                       --preferred-challenges dns --manual \
-                       --manual-auth-hook /letsencrypt-dns-authenticator.sh \
-                       --manual-cleanup-hook /letsencrypt-dns-cleanup.sh \
-                       ${domainlist} ${mail}; then
+                --preferred-challenges dns --manual \
+                --manual-auth-hook /letsencrypt-dns-authenticator.sh \
+                --manual-cleanup-hook /letsencrypt-dns-cleanup.sh \
+                ${domainlist} ${mail}; then
                 echo "#### Lets' Encrypt success"
             else
                 echo "**** Lets' Encrypt fail"
@@ -54,7 +54,7 @@ installcerts() {
         else
             # fallback standalone, needs access to ports 80, 443
             if certbot certonly -n --agree-tos -a standalone \
-                       ${domainlist} ${mail}; then
+                ${domainlist} ${mail}; then
                 echo "#### Lets' Encrypt success"
             else
                 echo "**** Lets' Encrypt fail"
