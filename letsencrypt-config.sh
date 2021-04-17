@@ -34,7 +34,7 @@ installcerts() {
     if ! test -e "$(certfile $server)" -a -e "$(keyfile $server)"; then
         if test -n "$WEBROOT" || pgrep nginx 2>&1 >/dev/null; then
             # use running nginx to get certificates
-            if certbot certonly -n --agree-tos -a webroot --webroot-path=/.well-known \
+            if certbot certonly -n --agree-tos -a webroot --webroot-path=/acme \
                 ${domainlist} ${mail}; then
                 echo "#### Lets' Encrypt success"
             else

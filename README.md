@@ -6,7 +6,7 @@ If variable `PREFIXES` is specified, it automatically prepends the space separat
 
 Set variable `MODE` to `standalone` to run it as standalone webserver. Do so, if you domn't run a webserver and you can expose port `80`.
 
-If you alreay have a webserver, set `MODE` to `webroot` to let that webserver serve `/.well-known` from a directory, that you mount in `/.well-known`. So you share the same path with your webserver.
+If you alreay have a webserver, set `MODE` to `webroot` to let that webserver serve `/acme` from a directory, that you mount in `/acme`. So you share the same path with your webserver.
 
 Specifiy your mail in `EMAIL` to get notified when certificates expire.
 

@@ -1,9 +1,9 @@
 FROM mwaeckerlin/very-base as build
 RUN $PKG_INSTALL certbot
-RUN mkdir /.well-known /etc/letsencrypt /var/log/letsencrypt
-RUN $ALLOW_USER /.well-known /etc/letsencrypt /var/log/letsencrypt
+RUN mkdir /acme /etc/letsencrypt /var/log/letsencrypt
+RUN $ALLOW_USER /acme /etc/letsencrypt /var/log/letsencrypt
 RUN tar cp \
-    /.well-known /etc/letsencrypt /var/log/letsencrypt /usr/lib/python* \
+    /acme /etc/letsencrypt /var/log/letsencrypt /usr/lib/python* \
     $(which python3 certbot head tr) \
     $(for f in $(which python3) $(find /usr/lib/python* -name '*.so*'); do \
     ldd $f | sed -n 's,.* => \([^ ]*\) .*,\1,p'; \
