@@ -7,7 +7,7 @@ for domain in ${DOMAINS}; do
             echo $prefix.$subdomain
         done
     done | head -c -1 | tr '\n' ',')
-    echo "**** installing certificates for: " ${DOMAINLIST}
+    echo certbot certonly ${OPTIONS} -n --expand --agree-tos --${MODE:-webroot} -w /acme --work-dir /tmp -d "${DOMAINLIST}" ${EMAIL:+-m} ${EMAIL}
     certbot certonly ${OPTIONS} -n --expand --agree-tos --${MODE:-webroot} -w /acme --work-dir /tmp -d "${DOMAINLIST}" ${EMAIL:+-m} ${EMAIL}
 done
 
