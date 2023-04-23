@@ -12,4 +12,4 @@ Specifiy your mail in `EMAIL` to get notified when certificates expire.
 
 Additional Options, e.g. `--dry-run`, can be added in variable `OPTIONS`.
 
-This image is used with [mwaeckerlin/reverse-proxy](https://github.com/reverse-proxy).
+This image is used with [mwaeckerlin/reverse-proxy](https://github.com/reverse-proxy). Check there for a full sample.

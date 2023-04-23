@@ -13,5 +13,4 @@ ENV MODE "webroot"
 ENV PREPEND "www"
 COPY --from=build / /
 COPY --from=cron / /
-VOLUME /etc/letsencrypt/live
 CMD [ "/letsencrypt-start.sh" ]
