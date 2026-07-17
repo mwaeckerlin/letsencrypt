@@ -1,10 +1,21 @@
-version: "3.4"
 services:
-  certbot:
+  letsencrypt:
     image: mwaeckerlin/letsencrypt
     build: .
     environment:
       EMAIL: "me@somewhere.universe"
       DOMAINS: "domain.com,a.domain.com,b.domain.com example.com"
       PREFIXES: "www mail"
-      OPTIONS: "--dry-run"
+      # While testing, point lego at the Let's Encrypt staging server:
+      OPTIONS: "--server letsencrypt-staging"
+    volumes:
+      - type: volume
+        source: certificates
+        target: /etc/letsencrypt
+      - type: volume
+        source: acme
+        target: /acme
+
+volumes:
+  certificates:
+  acme:

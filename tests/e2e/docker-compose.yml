@@ -1,0 +1,59 @@
+# E2E stack for mwaeckerlin/letsencrypt. Pebble is Let's Encrypt's own small
+# ACME test server (https://github.com/letsencrypt/pebble); it runs locally and
+# issues real certificates from a test CA. PEBBLE_VA_ALWAYS_VALID skips the
+# domain-control challenge so no public webserver is needed -- the ACME protocol
+# and the certificate issuance are real, only the challenge is short-circuited.
+
+# Explicit project name so this stack never collides with other e2e stacks that
+# also live in a directory called "e2e" (compose's default project name).
+name: letsencrypt-e2e
+
+services:
+
+  pebble:
+    image: ghcr.io/letsencrypt/pebble:latest
+    command: ["-config", "/test/config/pebble-config.json"]
+    environment:
+      PEBBLE_VA_ALWAYS_VALID: "1"
+      PEBBLE_VA_NOSLEEP: "1"
+
+  # The image under test: obtains a certificate from Pebble via lego, then exits.
+  letsencrypt:
+    image: mwaeckerlin/letsencrypt
+    build:
+      context: ../..
+    depends_on:
+      - pebble
+    restart: on-failure          # retry until Pebble is ready
+    environment:
+      # Two certificates (space separated); the second groups two names into one
+      # certificate (comma separated). PREFIXES adds www.<name> to every name.
+      DOMAINS: "test.example.com second.example.com,alt.example.com"
+      PREFIXES: "www"
+      EMAIL: "test@example.com"
+      MODE: "webroot"
+      OPTIONS: "--server https://pebble:14000/dir"
+      # Trust Pebble's test CA so lego accepts its ACME endpoint certificate.
+      LEGO_CA_CERTIFICATES: "/pebble.minica.pem"
+    volumes:
+      - ./pebble.minica.pem:/pebble.minica.pem:ro
+      - certificates:/etc/letsencrypt
+      - acme:/acme
+
+  test-runner:
+    build:
+      context: .
+    profiles:
+      - runner
+    depends_on:
+      - letsencrypt
+    environment:
+      LE_DIR: /etc/letsencrypt
+      DOMAIN: test.example.com
+    volumes:
+      - certificates:/etc/letsencrypt:ro
+    command: ["pytest", "-v", "--tb=short"]
+
+volumes:
+  certificates:
+  acme:
