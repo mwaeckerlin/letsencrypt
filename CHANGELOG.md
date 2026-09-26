@@ -1,5 +1,8 @@
 # Changelog
 
+- 2026-09-26 **2.0.2**
+    - The test suite installs its Python packages without a warning
+
 - 2026-09-26 **2.0.1**
     - The image is published for amd64 and arm64 under one tag, built, tested and published automatically on every change and every week
     - The standalone mode, where lego answers the challenge itself, is covered by an end to end test
