@@ -40,6 +40,24 @@ services:
       - certificates:/etc/letsencrypt
       - acme:/acme
 
+  # The same image in standalone mode: lego answers the challenge itself on
+  # port 80, without a webroot and without prefixes.
+  letsencrypt-standalone:
+    image: mwaeckerlin/letsencrypt
+    depends_on:
+      - pebble
+    restart: on-failure          # retry until Pebble is ready
+    environment:
+      DOMAINS: "standalone.example.com"
+      PREFIXES: ""                 # the image default is "www"
+      EMAIL: "test@example.com"
+      MODE: "standalone"
+      OPTIONS: "--server https://pebble:14000/dir"
+      LEGO_CA_CERTIFICATES: "/pebble.minica.pem"
+    volumes:
+      - ./pebble.minica.pem:/pebble.minica.pem:ro
+      - certificates-standalone:/etc/letsencrypt
+
   test-runner:
     build:
       context: .
@@ -47,13 +65,16 @@ services:
       - runner
     depends_on:
       - letsencrypt
+      - letsencrypt-standalone
     environment:
       LE_DIR: /etc/letsencrypt
       DOMAIN: test.example.com
     volumes:
       - certificates:/etc/letsencrypt:ro
+      - certificates-standalone:/standalone:ro
     command: ["pytest", "-v", "--tb=short"]
 
 volumes:
   certificates:
+  certificates-standalone:
   acme:

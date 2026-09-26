@@ -13,7 +13,7 @@ RUN chown -R somebody:somebody /root/acme /root/etc/letsencrypt
 
 # Install the two executables, their libraries and the CA bundle (to validate
 # the real Let's Encrypt endpoint) into /root for the scratch image.
-ENV EXE "/usr/bin/le-run /usr/bin/lego"
+ENV EXE="/usr/bin/le-run /usr/bin/lego"
 RUN tar cph $EXE /etc/ssl/certs/ca-certificates.crt \
     $(for f in $EXE; do \
     ldd $f | sed -n 's,.* => \([^ ]*\) .*,\1,p'; \
@@ -26,8 +26,8 @@ RUN test -e /root/usr/bin/le-run
 # The final image has no shell, no Python and no cron -- only lego, the C++
 # launcher and their dependencies.
 FROM mwaeckerlin/scratch
-ENV CONTAINERNAME "letsencrypt"
-ENV MODE "webroot"
-ENV PREFIXES "www"
+ENV CONTAINERNAME="letsencrypt"
+ENV MODE="webroot"
+ENV PREFIXES="www"
 COPY --from=build /root /
 CMD [ "/usr/bin/le-run" ]

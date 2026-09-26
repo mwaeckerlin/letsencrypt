@@ -1,10 +1,13 @@
 {
   "name": "@mwaeckerlin/letsencrypt",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "build": "docker compose build",
     "start": "docker compose up --build --force-recreate --remove-orphans",
+    "start:daemon": "docker compose up -d --build --force-recreate --remove-orphans",
+    "start:dev": "docker compose up --build --force-recreate --remove-orphans",
     "stop": "docker compose down",
+    "deploy": "docker compose push",
     "test": "npm run test:image && npm run test:e2e",
     "test:image": "npm run build && bash tests/image-contract.sh mwaeckerlin/letsencrypt",
     "test:e2e": "bash tests/run-e2e.sh"
