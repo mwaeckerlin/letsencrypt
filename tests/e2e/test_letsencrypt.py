@@ -61,10 +61,12 @@ def test_second_certificate_group_with_combined_names(fullchain):
     # A second, space separated certificate whose two comma separated names plus
     # their www prefixes share one certificate.
     import os
-    from conftest import LE_DIR
+    from conftest import LE_DIR, wait_for_file
 
+    # the two groups are issued one after the other; the fixture waits for the
+    # first only, so the second may still be on its way
     path = os.path.join(LE_DIR, "live", "second.example.com", "fullchain.pem")
-    assert os.path.exists(path)
+    assert wait_for_file(path), f"{path} was not issued"
     cert = _load(path)
     san = cert.extensions.get_extension_for_oid(
         ExtensionOID.SUBJECT_ALTERNATIVE_NAME

@@ -1,5 +1,8 @@
 # Changelog
 
+- 2026-09-26 **2.0.3**
+    - The end to end test waits for the second certificate instead of failing when it is issued a moment later
+
 - 2026-09-26 **2.0.2**
     - The test suite installs its Python packages without a warning
 
